@@ -6,7 +6,7 @@
 /*   By: fmoulin <fmoulin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/17 11:45:14 by fmoulin           #+#    #+#             */
-/*   Updated: 2026/06/17 12:08:04 by fmoulin          ###   ########.fr       */
+/*   Updated: 2026/06/22 11:15:07 by fmoulin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,16 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include <stdbool.h>
 
-typedef struct s_board
+typedef struct s_game
 {
-	char	*board;
-	char	*next;
+	char	**map;
 	int		width;
 	int		height;
 	int		iteration;
 	
-}					t_board;
+}					t_game;
 
 
 #endif
