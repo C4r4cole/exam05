@@ -6,7 +6,7 @@
 /*   By: fmoulin <fmoulin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 14:50:13 by fmoulin           #+#    #+#             */
-/*   Updated: 2026/06/23 14:55:44 by fmoulin          ###   ########.fr       */
+/*   Updated: 2026/06/25 13:35:41 by fmoulin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <string.h>
 
 typedef struct s_map
 {
-	char	*data;
+	char	**grid;
 	int		width;
 	int 	height;
 	char	empty;
