@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmoulin <fmoulin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/17 11:45:11 by fmoulin           #+#    #+#             */
-/*   Updated: 2026/06/24 17:42:39 by fmoulin          ###   ########.fr       */
+/*   Created: 2026/06/24 16:53:54 by fmoulin           #+#    #+#             */
+/*   Updated: 2026/06/24 17:49:56 by fmoulin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "life.h"
 
-void print_map(t_game game)
+void	print_map(t_game game)
 {
 	for (int y = 0; y < game.height; ++y)
 	{
@@ -37,81 +37,62 @@ void	free_map(t_game *game)
 	}
 }
 
-void	init_game(t_game *game, char **argv)
+void	game_init(t_game *game, char **argv)
 {
 	game->width = atoi(argv[1]);
 	game->height = atoi(argv[2]);
 	game->iteration = atoi(argv[3]);
-	
+
 	game->map = malloc(game->height * sizeof(char *));
 	for (int y = 0; y < game->height; ++y)
 	{
 		game->map[y] = malloc(game->width * sizeof(char));
 		for (int x = 0; x < game->width; ++x)
+		{
 			game->map[y][x] = ' ';
+		}
 	}
 }
 
 void	fill_map(t_game *game)
 {
-	char buffer;
-	int	x = 0;
-	int	y = 0;
-	bool draw = false;
+	char	buffer;
+	int		x = 0;
+	int		y = 0;
+	bool	draw = false;
+
 	while (read(STDIN_FILENO, &buffer, 1) == 1)
 	{
 		switch(buffer)
 		{
-			case ('w'):
-				if (y > 0)
-				{
-					--y;
-				}
-				break ;
-			case ('a'):
-				if (x > 0)
-				{
-					--x;
-				}
-				break ;
-			case ('s'):
-				if (y < game->height - 1)
-				{
-					++y;
-				}
-				break ;
-			case ('d'):
-				if (x < game->height - 1)
-				{
-					++x;
-				}
-				break ;
-			case ('x'):
-				draw = !draw;
-				break ;
-			default: continue;
+			case ('w'): if (y > 0) {--y; } break ;
+			case ('a'): if (x > 0) {--x; } break ;
+			case ('s'): if (y < game->height - 1) {++y; } break ;
+			case ('d'): if (x < game->width - 1) {++x; } break ;
+			case ('x'): draw = !draw; break ;
+			default : continue ;
 		}
-		
-		if (draw && x >= 0 && x <= game->width - 1 && y >= 0 && y <= game->height - 1)
+
+		if (draw && y >= 0 && y < game->height && x >= 0 && x < game->width)
 			game->map[y][x] = 'O';
 	}
 }
 
 int	count_neighbours(t_game *game, int y, int x)
 {
-	int	count = 0;
-	
+	int count = 0;
+
 	for (int dy = -1; dy < 2; ++dy)
 	{
 		for (int dx = -1; dx < 2; ++dx)
 		{
 			if (dy == 0 && dx == 0)
 				continue ;
-			
-			int nx = x + dx;
+
 			int ny = y + dy;
+			int nx = x + dx;
 			
-			if (nx >= 0 && nx < game->width && ny >= 0 && ny < game->height && game->map[ny][nx] == 'O')
+			if (ny >= 0 && ny < game->height && nx >= 0 && nx < game->width && game->map[ny][nx] == 'O')
 				count++;
 		}
 	}
@@ -120,7 +101,7 @@ int	count_neighbours(t_game *game, int y, int x)
 
 void	play_game(t_game *game)
 {
-	char **new_map = malloc(game->height * sizeof(char *));
+	char	**new_map = malloc(game->height * sizeof(char *));
 	for (int y = 0; y < game->height; ++y)
 	{
 		new_map[y] = malloc(game->width * sizeof(char));
@@ -131,9 +112,10 @@ void	play_game(t_game *game)
 		for (int x = 0; x < game->width; ++x)
 		{
 			int neighbours = count_neighbours(game, y, x);
+
 			if (game->map[y][x] == 'O')
 			{
-				if (neighbours == 2 || neighbours == 3)
+				if (neighbours == 3 || neighbours == 2)
 					new_map[y][x] = 'O';
 				else
 					new_map[y][x] = ' ';
@@ -151,14 +133,13 @@ void	play_game(t_game *game)
 	game->map = new_map;
 }
 
-int	main(int argc, char **argv)
+int main(int argc, char **argv)
 {
 	if (argc != 4)
 		return (1);
 
 	t_game	game;
-
-	init_game(&game, argv);
+	game_init(&game, argv);
 	fill_map(&game);
 
 	for (int i = 0; i < game.iteration; ++i)
@@ -166,6 +147,6 @@ int	main(int argc, char **argv)
 	
 	print_map(game);
 	free_map(&game);
-	
-	return (0);	
+
+	return (0);
 }
