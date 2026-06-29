@@ -6,7 +6,7 @@
 /*   By: fmoulin <fmoulin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 14:51:02 by fmoulin           #+#    #+#             */
-/*   Updated: 2026/06/29 16:01:05 by fmoulin          ###   ########.fr       */
+/*   Updated: 2026/06/29 17:30:00 by fmoulin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	fill_map(t_game *game)
 			default: continue ;
 		}
 
-		if (draw && y > 0 && y < game->height && x > 0 && x < game->width)
+		if (draw && y >= 0 && y < game->height && x >= 0 && x < game->width)
 			game->map[y][x] = 'O';
 	}
 }
@@ -126,12 +126,14 @@ void	play_game(t_game *game)
 			}
 		}
 	}
+	free_map(game);
+	game->map = new_map;
 }
 
 int	main(int argc, char **argv)
 {
 	if (argc != 4)
-		return (0);
+		return (1);
 	
 	t_game	game;
 	
